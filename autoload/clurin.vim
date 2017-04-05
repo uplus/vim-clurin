@@ -87,6 +87,9 @@ function! s:get_multi(dic, key) abort "{{{
 endfunction "}}}
 
 function! s:getdefs() abort " {{{
+  if exists('b:clurin_defs')
+    return b:clurin_defs
+  endif
   if has_key(g:, 'clurin') && type(g:clurin) == type({})
     let conf = g:clurin
   else
@@ -125,6 +128,8 @@ function! s:getdefs() abort " {{{
     unlet d
   endfor
 
+  echomsg 'called'
+  let b:clurin_defs = defs
   return defs
 endfunction " }}}
 
