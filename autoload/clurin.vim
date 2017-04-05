@@ -67,6 +67,25 @@ function! s:escape(pattern) abort " {{{
     return escape(a:pattern, '\~ .*^[''$')
 endfunction " }}}
 
+function! s:has_key_multi(dic, key) abort "{{{
+  for k in keys(a:dic)
+    if index(split(k), a:key) != -1
+      return 1
+    end
+  endfor
+  return 0
+endfunction "}}}
+
+function! s:get_multi(dic, key) abort "{{{
+  let p = []
+  for k in keys(a:dic)
+    if index(split(k), a:key) != -1
+      call add(p, a:dic[k])
+    end
+  endfor
+  return p
+endfunction "}}}
+
 function! s:getdefs() abort " {{{
   if has_key(g:, 'clurin') && type(g:clurin) == type({})
     let conf = g:clurin
@@ -79,8 +98,10 @@ function! s:getdefs() abort " {{{
     call add(p, b:clurin)
   endif
   for ft in [&filetype, '-']
-    if has_key(conf, ft)
-      call add(p, conf[ft])
+    if s:has_key_multi(conf, ft)
+      for d in s:get_multi(conf, ft)
+        call add(p, d)
+      endfor
       if get(conf, 'use_default', 1) && has_key(s:default_defs, ft) &&
             \ conf != s:default_defs
         call add(q, s:default_defs[ft])
