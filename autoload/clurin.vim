@@ -68,7 +68,6 @@ function! s:escape(pattern) abort " {{{
 endfunction " }}}
 
 function! s:getdefs() abort " {{{
-  let p = []
   if has_key(g:, 'clurin') && type(g:clurin) == type({})
     let conf = g:clurin
   else
