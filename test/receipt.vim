@@ -18,7 +18,7 @@ function! s:suite.before()
 endfunction
 
 function! s:suite.before_each()
-  execute 'normal!' 'ggdG'
+  new
 endfunction
 
 function! s:suite.after_each()
