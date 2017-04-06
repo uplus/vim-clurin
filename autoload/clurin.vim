@@ -128,7 +128,6 @@ function! s:getdefs() abort " {{{
     unlet d
   endfor
 
-  echomsg 'called'
   let b:clurin_defs = defs
   return defs
 endfunction " }}}
