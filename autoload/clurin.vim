@@ -102,10 +102,14 @@ function! s:getdefs() abort " {{{
   endif
   for ft in [&filetype, '-']
     if s:has_key_multi(conf, ft)
+      let use_default = get(conf, 'use_default', 1)
       for d in s:get_multi(conf, ft)
         call add(p, d)
+        if type(d) == type({}) && has_key(d, 'use_default')
+          let use_default = d.use_default
+        endif
       endfor
-      if get(conf, 'use_default', 1) && has_key(s:default_defs, ft) &&
+      if use_default && has_key(s:default_defs, ft) &&
             \ conf != s:default_defs
         call add(q, s:default_defs[ft])
       endif
