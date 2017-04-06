@@ -3,8 +3,8 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:countup(str, cnt, ...) abort " {{{
-  return str2nr(a:str) + a:cnt
+function! s:countup(strs, cnt, ...) abort " {{{
+  return str2nr(a:strs[0]) + a:cnt
 endfunction " }}}
 
 " default_def {{{
@@ -152,7 +152,7 @@ function! s:nmatch(conf, config) abort " {{{
       endif
       let l2 = matchend(line, d.pattern, l1)
       if col < l2
-        let text = substitute(line[l1 : l2-1], d.pattern, '\=submatch(1)', '')
+        let text = matchlist(line[l1 : l2-1], d.pattern)[1:]
         return {'start': l1, 'end': l2, 'len': l2-l1, 'index': i, 'conf': a:conf, 'text': text}
       endif
       let l1 += 1
@@ -186,7 +186,7 @@ function! s:vmatch(conf, ...) abort " {{{
       if text =~# pattern
         let l1 = pos1[2]-1
         let l2 = pos2[2]
-        let text = substitute(text, pattern, '\=submatch(1)', '')
+        let text = matchlist(text, pattern)[1:]
         return {'start': l1, 'end': l2, 'len': l2-l1, 'index': i, 'conf': a:conf, 'text': text}
       endif
     endfor
@@ -229,7 +229,10 @@ function! s:replace(m, cnt) abort " {{{
       return
     endif
   else
-    let str = substitute(d.replace, '\\1', a:m.text, 'g')
+    let str = d.replace
+    for i in range(len(a:m.text))
+      let str = substitute(str, '\\'.(i+1), a:m.text[i], 'g')
+    endfor
   endif
   let line = getline('.')
   let pre = a:m.start < 1 ? '' : line[: a:m.start - 1]
