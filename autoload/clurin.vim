@@ -3,8 +3,8 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:countup(str, cnt, ...) abort " {{{
-  return str2nr(a:str) + a:cnt
+function! s:countup(strs, cnt, ...) abort " {{{
+  return str2nr(a:strs[0]) + a:cnt
 endfunction " }}}
 
 " default_def {{{
